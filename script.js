@@ -1,41 +1,66 @@
 const screen = document.querySelector("#calculator-screen");
 
-const allBtns = document.querySelectorAll("button");
-
 const numberBtns = document.querySelectorAll(".btn.number");
+const operationBtns = document.querySelectorAll(".btn.operation");
+
 const clearBtn = document.querySelector("#clear");
 const delBtn = document.querySelector("#delete");
-
 const equalBtn = document.querySelector("#equal");
 
-function simpleCalc(string) {
+function searchOperator(string) {
     const operators = ["+", "-", "x", "÷"];
-    let stringOperator = "";
+    const stringOperator = operators.find(op => string.includes(op));
 
+    /* 
     for (const operator of operators) {
         if (string.includes(operator)) {
             stringOperator = operator;
             break;
         }
-    }
+    } The previous line of code is equivalent to this snippet
+    */
 
-    // The previous loop is equivalent to this code => const stringOperator = operators.find(op => string.includes(op));
+    return stringOperator;
+}
 
-    const [leftValue, rightValue] = string.split(stringOperator).map(value => Number(value));
+function simpleOperation(string) {
+    const operator = searchOperator(string);
 
-    switch (stringOperator) {
+    const [leftValue, rightValue] = string.split(operator).map(value => Number(value));
+
+    switch (operator) {
         case "+": return leftValue + rightValue;
         case "-": return leftValue - rightValue;
         case "x": return leftValue * rightValue;
-        case "÷": return leftValue / rightValue;
-        default: return "Unable to perform expression, unknown operator."
+        case "÷": return rightValue === 0 ? "Can't divide by zero" : leftValue / rightValue;
+        default: return "Unable to perform expression, unknown operator.";
     }
 }
 
-allBtns.forEach(
+numberBtns.forEach(button => button.addEventListener("click", () => { screen.textContent += button.textContent }));
+
+operationBtns.forEach(
     button => button.addEventListener("click", () => {
-        if (button.classList.contains("number") || button.classList.contains("operation")) {
-            screen.textContent += button.textContent;
+        const operator = searchOperator(screen.textContent);
+        const hasOperator = operator ? true : false;
+
+        if (!hasOperator) {
+            screen.textContent += button.textContent
+        } else {
+            const [leftValue, rightValue] = screen.textContent.split(operator);
+
+            const operationString = [leftValue, operator, rightValue];
+            const validString = operationString.filter(x => x != undefined).length;
+
+            console.log(operationString);
+            console.log(validString);
+
+            if (validString === 3) {
+                screen.textContent = simpleOperation(screen.textContent);
+                screen.textContent += button.textContent
+            } else {
+                screen.textContent += button.textContent
+            }
         }
     })
 );
@@ -49,5 +74,5 @@ delBtn.addEventListener("click", () => {
 });
 
 equalBtn.addEventListener("click", () => { 
-    screen.textContent = simpleCalc(screen.textContent); 
+    screen.textContent = screen.textContent === "" ? "0" : simpleOperation(screen.textContent);
 });
