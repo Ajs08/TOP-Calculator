@@ -59,6 +59,12 @@ function simpleOperation(string) {
 
 numberBtns.forEach(button => button.addEventListener("click", () => { screen.textContent += button.textContent }));
 
+dotBtn.addEventListener("click", () => {
+    if (!isNaN(screen.textContent[screen.textContent.length - 1])) {
+        screen.textContent += ".";
+    }
+});
+
 operationBtns.forEach(
     button => button.addEventListener("click", () => {
         const operator = searchOperator(screen.textContent);
@@ -101,10 +107,4 @@ delBtn.addEventListener("click", () => {
 
 equalBtn.addEventListener("click", () => { 
     screen.textContent = screen.textContent === "" ? "0" : simpleOperation(screen.textContent);
-});
-
-dotBtn.addEventListener("click", () => {
-    if (!isNaN(screen.textContent[screen.textContent.length - 1])) {
-        screen.textContent += ".";
-    }
 });

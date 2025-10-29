@@ -75,7 +75,11 @@ h1 {
     background-color: #5D7881;
     color: white;
     border: none;
-    font-size: 20px;
+    font-size: 22px;
+}
+
+.btn:hover {
+    background-color: #6090a0;
 }
 
 #zero {
@@ -85,4 +89,8 @@ h1 {
 #clear {
     background-color: #C01E2D;
     color: white;
+}
+
+#clear:hover {
+    background-color: #d13646;
 }
