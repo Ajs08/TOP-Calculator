@@ -29,25 +29,27 @@ function simpleOperation(string) {
     const [left, right] = string.split(operator);
 
     const leftValue = Number(left);
-    const rightValue = right.includes("%")
+    const rightValue = right.endsWith("%")
         ? Number(right.split("%")[0]) / 100
         : Number(right);
 
     switch (operator) {
         case "+": 
-            return right.includes("%")
+            return right.endsWith("%")
                 ? leftValue + leftValue * rightValue
                 : leftValue + rightValue;
 
         case "-": 
-            return right.includes("%")
+            return right.endsWith("%")
                 ? leftValue - leftValue * rightValue
                 : leftValue - rightValue;
 
         case "x": 
-            return leftValue * rightValue
+            return leftValue * rightValue;
+
         case "÷": 
             return rightValue === 0 ? "Can't divide by zero" : leftValue / rightValue;
+
         default: 
             return "Unable to perform expression, unknown operator.";
     }
@@ -71,12 +73,12 @@ operationBtns.forEach(
 
             if (validString === 3) {
                 screen.textContent = simpleOperation(screen.textContent);
-                screen.textContent += button.textContent
+                screen.textContent += button.textContent;
             } else {
-                screen.textContent += button.textContent
+                screen.textContent += button.textContent;
             }
         } else {
-            screen.textContent += button.textContent
+            screen.textContent += button.textContent;
         }
     })
 );
