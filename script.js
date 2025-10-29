@@ -1,7 +1,8 @@
 const screen = document.querySelector("#calculator-screen");
 
 const numberBtns = document.querySelectorAll(".btn.number");
-const operationBtns = document.querySelectorAll(".btn.operation");
+const operationBtns = document.querySelectorAll(".btn.basic-operation");
+const percentageBtn = document.querySelector(".btn.complex-operation");
 
 const clearBtn = document.querySelector("#clear");
 const delBtn = document.querySelector("#delete");
@@ -25,15 +26,30 @@ function searchOperator(string) {
 
 function simpleOperation(string) {
     const operator = searchOperator(string);
+    const [left, right] = string.split(operator);
 
-    const [leftValue, rightValue] = string.split(operator).map(value => Number(value));
+    const leftValue = Number(left);
+    const rightValue = right.includes("%")
+        ? Number(right.split("%")[0]) / 100
+        : Number(right);
 
     switch (operator) {
-        case "+": return leftValue + rightValue;
-        case "-": return leftValue - rightValue;
-        case "x": return leftValue * rightValue;
-        case "÷": return rightValue === 0 ? "Can't divide by zero" : leftValue / rightValue;
-        default: return "Unable to perform expression, unknown operator.";
+        case "+": 
+            return right.includes("%")
+                ? leftValue + leftValue * rightValue
+                : leftValue + rightValue;
+
+        case "-": 
+            return right.includes("%")
+                ? leftValue - leftValue * rightValue
+                : leftValue - rightValue;
+
+        case "x": 
+            return leftValue * rightValue
+        case "÷": 
+            return rightValue === 0 ? "Can't divide by zero" : leftValue / rightValue;
+        default: 
+            return "Unable to perform expression, unknown operator.";
     }
 }
 
@@ -44,9 +60,7 @@ operationBtns.forEach(
         const operator = searchOperator(screen.textContent);
         const hasOperator = operator ? true : false;
 
-        if (!hasOperator) {
-            screen.textContent += button.textContent
-        } else {
+        if (hasOperator) {
             const [leftValue, rightValue] = screen.textContent.split(operator);
 
             const operationString = [leftValue, operator, rightValue];
@@ -61,9 +75,17 @@ operationBtns.forEach(
             } else {
                 screen.textContent += button.textContent
             }
+        } else {
+            screen.textContent += button.textContent
         }
     })
 );
+
+percentageBtn.addEventListener("click", () => {
+  if (!screen.textContent.endsWith("%")) {
+    screen.textContent += "%";
+  }
+});
 
 clearBtn.addEventListener("click", () => {screen.textContent = ""});
 
