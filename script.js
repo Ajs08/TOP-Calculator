@@ -8,6 +8,8 @@ const clearBtn = document.querySelector("#clear");
 const delBtn = document.querySelector("#delete");
 const equalBtn = document.querySelector("#equal");
 
+const dotBtn = document.querySelector("#dot");
+
 function searchOperator(string) {
     const operators = ["+", "-", "x", "÷"];
     const stringOperator = operators.find(op => string.includes(op));
@@ -99,4 +101,10 @@ delBtn.addEventListener("click", () => {
 
 equalBtn.addEventListener("click", () => { 
     screen.textContent = screen.textContent === "" ? "0" : simpleOperation(screen.textContent);
+});
+
+dotBtn.addEventListener("click", () => {
+    if (!isNaN(screen.textContent[screen.textContent.length - 1])) {
+        screen.textContent += ".";
+    }
 });
